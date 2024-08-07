@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const calculatorRoutes = require('./routes/calculator.routes'); // Ajusta la ruta según sea necesario
+const calculatorController = require('./controllers/calculator.controller'); // Ajusta según sea necesario
+const cors = require('cors');
+const bodyParser = require('body-parser'); // Asegúrate de tener esta línea
 
 const app = express();
 
@@ -15,10 +17,17 @@ mongoose.connect('mongodb://localhost:27017/calculatora', {
 });
 
 // Middleware
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
 
 // Rutas
-app.use('/api', calculatorRoutes);
+app.get('/add', calculatorController.addition);
+app.get('/subtract', calculatorController.subtraction);
+app.get('/multiply', calculatorController.multiplication);
+app.get('/divide', calculatorController.division);
+app.get('/power', calculatorController.power);
+app.get('/squareRoot', calculatorController.squareRoot);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
